@@ -1,5 +1,10 @@
+import fs from 'fs'
+import path from 'path'
+import matter from 'gray-matter'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+
+const postsDir: string = path.join(process.cwd(), 'posts')
 
 export default function Home() {
   return (
