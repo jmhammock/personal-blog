@@ -1,8 +1,9 @@
 import { PostMatter } from "./PostMatter";
 
-interface Post {
-    metaData: PostMatter,
-    content: string
+interface IPost {
+    metaData: PostMatter;
+    id: string;
+    content: string;
 }
 
-export type { Post }
+export type { IPost }

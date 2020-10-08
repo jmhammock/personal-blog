@@ -1,35 +1,42 @@
 import React from 'react'
-import { GetStaticProps } from 'next'
-import getSortedPosts from '../lib/posts'
-import { Post } from '../models/Post'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { getSortedPosts } from '../lib/posts'
+import { IPost } from '../models/Post'
+import PreviewCard from '../components/PreviewCard'
+import Columns from '../components/Columns/Columns'
+import Column from '../components/Columns/Column'
+import Menu from '../components/Menu/Menu'
+import MenuLabel from '../components/Menu/MenuLabel'
+import MenuList from '../components/Menu/MenuList'
 
-export default function Home({ posts }) {
-    return  <div className="grid">
-        <main>
-            {posts.map((post: Post) => {
-                return <div className="card">
-                    <div className="card-body">
-                        <h2 className="card-title">{post.metaData.title}</h2>
-                        <div className="card-content" dangerouslySetInnerHTML={{__html: post.content}}></div>
-                    </div>
-                </div>
+export default function Home({posts, postCategories}: InferGetStaticPropsType<typeof getStaticProps>) {
+    return <Columns>
+        <Column size={2}>
+            <Menu>
+                <MenuLabel>Categories</MenuLabel>
+                <MenuList>
+                    {postCategories.map((cat: string) => {
+                        return <li><a>{cat}</a></li>  
+                    })}
+                </MenuList>
+                <MenuLabel>Archive</MenuLabel>
+            </Menu>
+        </Column>
+        <Column size={10}>
+            {posts.map((post: IPost) => {
+                return <PreviewCard post={post}/> 
             })}
-        </main>
-        <aside>
-            <ul>
-                {posts.map((post: Post) => {
-                    return <li>{post.metaData.category}</li>
-                })}
-            </ul>
-        </aside>
-    </div> 
+        </Column>
+    </Columns>
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-    const posts: Array<Post> = await getSortedPosts();
+export const getStaticProps: GetStaticProps = async () => {
+    const posts: Array<IPost> = await getSortedPosts();
+    const postCategories: Array<string> = posts.map(p => p.metaData.category);
     return {
         props: {
-            posts
+            posts,
+            postCategories
         }
     }
 }
