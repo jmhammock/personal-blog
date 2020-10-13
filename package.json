@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@primer/octicons-react": "^11.0.0",
     "bulma": "^0.9.1",
     "gray-matter": "^4.0.2",
     "next": "9.5.1",
