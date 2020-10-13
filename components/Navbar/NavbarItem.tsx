@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { ReactNode } from 'react'
+=======
+import React, { Component, ReactNode } from 'react'
+>>>>>>> 0466ed117e44c86758d2f4f808fe73fa4436a284
 
 interface NavbarItemProps { 
     children: ReactNode,
