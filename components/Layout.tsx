@@ -1,43 +1,38 @@
-import { MarkGithubIcon } from '@primer/octicons-react';
-import React, { useState } from 'react';
-import { ButtonLink, ButtonColor } from './Button';
-import { Icon, IconSize } from './Icon';
-import Navbar from './Navbar/Navbar';
-import NavbarBrand from './Navbar/NavbarBrand';
-import NavbarBurger from './Navbar/NavbarBurger';
-import { NavbarItemLink } from './Navbar/NavbarItem';
-import NavbarMenu from './Navbar/NavbarMenu';
-import { NavbarEnd } from './Navbar/NavbarPosition';
+import React, { ReactNode } from 'react'
+import Column from './Columns/Column'
+import Columns from './Columns/Columns'
+import Menu from './Menu/Menu'
+import MenuLabel from './Menu/MenuLabel'
+import MenuList from './Menu/MenuList'
 
-const Layout = ({ children }): JSX.Element => {
-    const [isActive, setIsActive] = useState(false);
+interface LayoutProps {
+    categories: Array<string>
+    months: Array<String>,
+    children: ReactNode
+}
 
-    const toggleIsActive = () => setIsActive(!isActive);
-
-    return <>
-        <Navbar>
-            <div className="container">
-            <NavbarBrand>
-                <NavbarItemLink href="/" title="Home Page">
-                    <img src="https://bulma.io/images/bulma-logo.png" height={28} width={112}/>
-                </NavbarItemLink>
-                <NavbarBurger isActive={isActive} handleClick={toggleIsActive}/>
-            </NavbarBrand>
-            <NavbarMenu isActive={isActive}>
-                <NavbarEnd>
-                    <ButtonLink color={ButtonColor.primary} href="/" title="Jason Hammock GitHub">
-                        <Icon size={IconSize.small}>
-                            <MarkGithubIcon />
-                        </Icon>
-                    </ButtonLink>
-                </NavbarEnd>
-            </NavbarMenu>
-            </div>
-        </Navbar>
-        <div className="container">
+const Layout = ({ categories, months, children }: LayoutProps): JSX.Element => {
+    return <Columns>
+        <Column size={2}>
+            <Menu>
+                <MenuLabel>Categories</MenuLabel>
+                <MenuList>
+                    {categories.map((cat: string) => {
+                        return <li><a>{cat}</a></li>  
+                    })}
+                </MenuList>
+                <MenuLabel>Archive</MenuLabel>
+                <MenuList>
+                    {months.map((cat: string) => {
+                        return <li><a>{cat}</a></li>  
+                    })}
+                </MenuList>
+            </Menu>
+        </Column>
+        <Column size={10}>
             {children}
-        </div>
-    </>
+        </Column>
+    </Columns>
 }
 
 export default Layout;

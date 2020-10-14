@@ -1,13 +1,13 @@
 import React from 'react';
 import { GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next';
-import { getAllPostIds, getPostData } from '../../lib/posts';
+import { getAllPostIds, getPostData, getUniquePostMetaData } from '../../lib/posts';
+import Layout from '../../components/Layout';
+import SinglePost from '../../components/SinglePost';
 
-export default function Post({post}) {
-    return <div className="container">
-        <div className="section">
-           {post.metaData.title}
-        </div>
-    </div>
+export default function Post({ post, categories, months }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
+    return <Layout categories={categories} months={months}>
+        <SinglePost post={post} />
+    </Layout>
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -18,14 +18,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 
-export const getStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const pageId: string = typeof params.id === 'string' ?
         params.id :
-        params.id[0];
-    const postData = await getPostData(pageId);
+        params.id[0]
+    const post = await getPostData(pageId)
+    const categories = getUniquePostMetaData('category')
+    const months = getUniquePostMetaData('dateCreated')
+        .map(stringDate => (new Date(stringDate)).toLocaleString('long', { month: 'long'}))
     return {
         props: {
-            post: postData
+            post,
+            categories,
+            months
         }
     }
 }

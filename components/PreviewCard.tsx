@@ -24,7 +24,7 @@ const PreviewCard = ({post}: PreviewCardProps): JSX.Element => {
                     <Excerpt content={post.content} length={55} />
                 </CardText>
                 <CardFooter>
-                    <a className="btn btn-primary">Read More</a>
+                    <a className="btn btn-primary" href={`posts/${post.id}`}>Read More</a>
                 </CardFooter>
             </CardContent>
         </CardContent>

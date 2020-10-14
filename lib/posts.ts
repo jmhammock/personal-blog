@@ -8,8 +8,8 @@ import { IPost } from '../models/Post'
 const postsDir: string = path.join(process.cwd(), 'posts');
 
 const getSortedPosts = async (): Promise<Array<IPost>> => {
-     const fileNames: Array<string> = fs.readdirSync(postsDir)
-     const allPostsData: Array<IPost> = await Promise.all(fileNames.map(async (fileName: string): Promise<IPost> => {
+    const fileNames: Array<string> = fs.readdirSync(postsDir)
+    const allPostsData: Array<IPost> = await Promise.all(fileNames.map(async (fileName: string): Promise<IPost> => {
         const id: string = fileName.replace(/\.md$/, '')
         const fullPath: string = path.join(postsDir, fileName)
         const fileContents: string = fs.readFileSync(fullPath, 'utf-8')
@@ -25,11 +25,11 @@ const getSortedPosts = async (): Promise<Array<IPost>> => {
             id: id,
             content: contentHtml
         }
-     }))
+    }))
 
-     return allPostsData.sort((a: IPost, b: IPost): number => {
-         return a.metaData.dateCreated < b.metaData.dateCreated ? 1 : -1
-     })
+    return allPostsData.sort((a: IPost, b: IPost): number => {
+        return a.metaData.dateCreated < b.metaData.dateCreated ? 1 : -1
+    })
 }
 
 const getAllPostIds = () => {
@@ -67,4 +67,17 @@ const getPostContentHtml = async (content: string): Promise<string> => {
     return processContent.toString();
 }
 
-export { getSortedPosts, getAllPostIds, getPostData };
+const getUniquePostMetaData = (key: string): Array<string> => {
+    let entries = new Set<string>()
+    fs.readdirSync(postsDir).forEach(fileName => {
+        const content: string = fs.readFileSync(path.join(postsDir, fileName), 'utf-8')
+        const metaData = matter(content)
+        if (metaData.data[key] !== undefined) {
+            entries.add(metaData.data[key])
+        } 
+    })
+
+    return Array.from(entries)
+}
+
+export { getSortedPosts, getAllPostIds, getPostData, getUniquePostMetaData };

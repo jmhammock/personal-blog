@@ -23,5 +23,5 @@ class PostMatter implements IPostMatter {
 
 }
 
-export type { IPostMatter };
+export type { IPostMatter }
 export { PostMatter }

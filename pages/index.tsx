@@ -1,42 +1,28 @@
 import React from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getSortedPosts } from '../lib/posts'
+import { getSortedPosts, getUniquePostMetaData } from '../lib/posts'
 import { IPost } from '../models/Post'
 import PreviewCard from '../components/PreviewCard'
-import Columns from '../components/Columns/Columns'
-import Column from '../components/Columns/Column'
-import Menu from '../components/Menu/Menu'
-import MenuLabel from '../components/Menu/MenuLabel'
-import MenuList from '../components/Menu/MenuList'
+import Layout from '../components/Layout'
 
-export default function Home({posts, postCategories}: InferGetStaticPropsType<typeof getStaticProps>) {
-    return <Columns>
-        <Column size={2}>
-            <Menu>
-                <MenuLabel>Categories</MenuLabel>
-                <MenuList>
-                    {postCategories.map((cat: string) => {
-                        return <li><a>{cat}</a></li>  
-                    })}
-                </MenuList>
-                <MenuLabel>Archive</MenuLabel>
-            </Menu>
-        </Column>
-        <Column size={10}>
-            {posts.map((post: IPost) => {
-                return <PreviewCard post={post}/> 
-            })}
-        </Column>
-    </Columns>
+export default function Home({posts, postCategories, postMonths}: InferGetStaticPropsType<typeof getStaticProps>) {
+    return <Layout categories={postCategories} months={postMonths}>
+        {posts.map((post: IPost) => {
+            return <PreviewCard post={post}/> 
+        })}
+    </Layout>
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const posts: Array<IPost> = await getSortedPosts();
-    const postCategories: Array<string> = posts.map(p => p.metaData.category);
+    const posts: Array<IPost> = await getSortedPosts()
+    const postCategories: Array<string> = getUniquePostMetaData('category')
+    const postMonths: Array<string> = getUniquePostMetaData('dateCreated')
+        .map(stringDate => (new Date(stringDate)).toLocaleString('long', { month: 'long'}))
     return {
         props: {
             posts,
-            postCategories
+            postCategories,
+            postMonths
         }
     }
 }
