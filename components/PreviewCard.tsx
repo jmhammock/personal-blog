@@ -33,7 +33,7 @@ const PreviewCard = ({post}: PreviewCardProps): JSX.Element => {
 
 const Excerpt = ({content, length}: ExcerptProps): JSX.Element => {
     let cleaned = content.replace(/<\/?[^>]+(>|$)/g, '');
-    return <p>{`${cleaned.slice(0, length)}...`}</p>
+    return <>{`${cleaned.slice(0, length)}...`}</>
 }
 
 export default PreviewCard;

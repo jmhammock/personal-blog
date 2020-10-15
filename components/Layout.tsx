@@ -18,13 +18,13 @@ const Layout = ({ categories, months, children }: LayoutProps): JSX.Element => {
                 <MenuLabel>Categories</MenuLabel>
                 <MenuList>
                     {categories.map((cat: string) => {
-                        return <li><a>{cat}</a></li>  
+                        return <li><a href={`/category/${cat}`}>{cat}</a></li>  
                     })}
                 </MenuList>
                 <MenuLabel>Archive</MenuLabel>
                 <MenuList>
-                    {months.map((cat: string) => {
-                        return <li><a>{cat}</a></li>  
+                    {months.map((month: string) => {
+                        return <li><a href={`/month/${month}`}>{month}</a></li>  
                     })}
                 </MenuList>
             </Menu>

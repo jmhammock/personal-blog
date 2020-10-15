@@ -5,7 +5,7 @@ interface CardContentProps {
 }
 
 const CardContent = ({children}: CardContentProps) => {
-    return <div className="card-content">
+    return <div className="card-content content">
         {children}
     </div>
 }
